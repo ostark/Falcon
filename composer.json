@@ -1,0 +1,45 @@
+{
+  "name": "joshangell/falcon",
+  "description": "foo",
+  "type": "craft-plugin",
+  "version": "0.1.0",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "falcon"
+  ],
+  "support": {
+    "docs": "https://github.com/ostark/falcon/blob/master/README.md",
+    "issues": "https://github.com/ostark/falcon/issues"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Oliver Stark",
+      "homepage": "https://www.fortrabbit.com"
+    },
+    {
+      "name": "Josh Angell",
+      "homepage": "http://joshangell.co.uk"
+    }
+  ],
+  "require": {
+    "craftcms/cms": "~3.0.0-beta.23",
+    "guzzlehttp/guzzle": "^6.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "joshangell\\falcon\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "Falcon",
+    "handle": "falcon",
+    "schemaVersion": "0.1.0",
+    "hasCpSettings": false,
+    "hasCpSection": false,
+    "changelogUrl": "https://raw.githubusercontent.com/ostark/falcon/master/CHANGELOG.md"
+  }
+}
