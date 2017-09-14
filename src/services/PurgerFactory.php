@@ -1,19 +1,16 @@
 <?php namespace joshangell\falcon\services;
 
-use joshangell\falcon\drivers\CacheInterface;
-use joshangell\falcon\drivers\Varnish;
 use Psr\Log\InvalidArgumentException;
 use yii\base\Component;
 
-class CacheFactory extends Component
+class PurgerFactory extends Component
 {
-
     const DRIVERS_NAMESPACE = 'joshangell\falcon\drivers';
 
     /**
      * @param array $config
      *
-     * @return \joshangell\falcon\drivers\CacheInterface
+     * @return \joshangell\falcon\drivers\CachePurgeInterface
      */
     public static function create(array $config = [])
     {
@@ -31,7 +28,7 @@ class CacheFactory extends Component
         $driverClass = $driverConfig['class'] ?? self::DRIVERS_NAMESPACE . '\\' . ucfirst($config['driver']);
 
 
-        \Craft::createObject($driverClass,[$driverConfig]);
+        return \Craft::createObject($driverClass,[$driverConfig]);
 
     }
 }

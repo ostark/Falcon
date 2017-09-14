@@ -3,7 +3,7 @@
 use GuzzleHttp\Client;
 
 
-class Varnish extends AbstractDriver implements CacheInterface
+class Varnish extends AbstractPurger implements CachePurgeInterface
 {
 
     public function purgeByKeys(array $keys)
@@ -20,6 +20,11 @@ class Varnish extends AbstractDriver implements CacheInterface
                 'url' => $url
             ]
         );
+    }
+
+    public function purgeAll()
+    {
+        // TODO: Implement purgeAll() method.
     }
 
     protected function sendPurgeRequest(array $options = []){

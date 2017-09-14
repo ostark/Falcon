@@ -6,20 +6,28 @@
  * Date: 13.09.17
  * Time: 12:55
  */
-interface CacheInterface
+interface CachePurgeInterface
 {
     /**
      * @param array $keys
      *
-     * @return mixed
+     * @return bool
      */
     public function purgeByKeys(array $keys);
 
     /**
      * @param string $url
      *
-     * @return mixed
+     * @return bool
      */
     public function purgeByUrl(string $url);
+
+
+    /**
+     * @param string $url
+     *
+     * @return bool
+     */
+    public function purgeAll();
 
 }

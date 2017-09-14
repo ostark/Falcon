@@ -7,7 +7,7 @@ use yii\base\Object;
  * Date: 13.09.17
  * Time: 12:54
  */
-class AbstractDriver extends Object
+class AbstractPurger extends Object
 {
     /**
      * @var string

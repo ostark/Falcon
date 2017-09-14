@@ -3,7 +3,7 @@
 
 use GuzzleHttp\Client;
 
-class Keycdn extends AbstractDriver implements CacheInterface
+class Keycdn extends AbstractPurger implements CachePurgeInterface
 {
 
     /**
@@ -41,6 +41,11 @@ class Keycdn extends AbstractDriver implements CacheInterface
         );
     }
 
+
+    public function purgeAll()
+    {
+        // TODO: Implement purgeAll() method.
+    }
 
     protected function sendPurgeRequest(string $type, array $params = [])
     {
