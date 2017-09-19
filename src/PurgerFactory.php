@@ -1,4 +1,4 @@
-<?php namespace joshangell\falcon\services;
+<?php namespace joshangell\falcon;
 
 use Psr\Log\InvalidArgumentException;
 use yii\base\Component;

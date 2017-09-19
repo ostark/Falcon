@@ -32,7 +32,7 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
     /**
      * @param string $url
      */
-    public function purgeByUrl(string $url)
+            public function purgeByUrl(string $url)
     {
         $url = $this->domain . $url;
         $this->sendPurgeRequest('purgeurl', [

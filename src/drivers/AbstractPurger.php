@@ -14,6 +14,7 @@ class AbstractPurger extends Object
      */
     protected $headerName;
 
+    protected $queue = false;
 
     public function __construct($config)
     {
@@ -29,5 +30,6 @@ class AbstractPurger extends Object
     public function setheaderName($value) {
         $this->headerName = $value;
     }
+
 
 }
