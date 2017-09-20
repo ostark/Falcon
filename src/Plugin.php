@@ -3,6 +3,7 @@
 
 use Craft;
 use craft\base\Plugin as BasePlugin;
+use joshangell\falcon\behaviors\CacheControlBehavior;
 use joshangell\falcon\drivers\CachePurgeInterface;
 use joshangell\falcon\models\Settings;
 
@@ -43,6 +44,9 @@ class Plugin extends BasePlugin
         // Register event handlers
         EventRegistrar::registerFrontendEvents();
         EventRegistrar::registerUpdateEvents();
+
+        // Attach Behaviors
+        \Craft::$app->getResponse()->attachBehavior('cache-control', CacheControlBehavior::class);
 
 
     }

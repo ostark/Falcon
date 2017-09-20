@@ -21,7 +21,7 @@ class CacheResponseEvent extends Event
     /**
      * @var int Cache TTL in seconds
      */
-    public $ttl = 0;
+    public $maxAge = 0;
 
 
 }
