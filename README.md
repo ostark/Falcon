@@ -4,8 +4,9 @@ Craft 2 development happens here: https://github.com/joshangell/Falcon
 
 ## Features
 
-- autotagging
+- autotagging (surrogate keys / cache tags)
+- multi cache proxy support (Varnish, Keycdn, Fastly, Cloudflare, Local)
 - autoinvalidation
-- multi cache proxy support
+
 
 ![example](https://github.com/ostark/falcon-craft3/blob/master/example-headers.png)
