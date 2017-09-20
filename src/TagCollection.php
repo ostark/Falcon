@@ -6,7 +6,7 @@
  * Time: 14:37
  */
 
-namespace joshangell\falcon;
+namespace ostark\falcon;
 
 
 class TagCollection

@@ -1,16 +1,16 @@
-<?php namespace joshangell\falcon;
+<?php namespace ostark\falcon;
 
 use Psr\Log\InvalidArgumentException;
 use yii\base\Component;
 
 class PurgerFactory extends Component
 {
-    const DRIVERS_NAMESPACE = 'joshangell\falcon\drivers';
+    const DRIVERS_NAMESPACE = 'ostark\falcon\drivers';
 
     /**
      * @param array $config
      *
-     * @return \joshangell\falcon\drivers\CachePurgeInterface
+     * @return \ostark\falcon\drivers\CachePurgeInterface
      */
     public static function create(array $config = [])
     {

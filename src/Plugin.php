@@ -1,11 +1,11 @@
-<?php namespace joshangell\falcon;
+<?php namespace ostark\falcon;
 
 
 use Craft;
 use craft\base\Plugin as BasePlugin;
-use joshangell\falcon\behaviors\CacheControlBehavior;
-use joshangell\falcon\drivers\CachePurgeInterface;
-use joshangell\falcon\models\Settings;
+use ostark\falcon\behaviors\CacheControlBehavior;
+use ostark\falcon\drivers\CachePurgeInterface;
+use ostark\falcon\models\Settings;
 
 /**
  * @method    Settings getSettings()
@@ -66,7 +66,7 @@ class Plugin extends BasePlugin
 
 
     /**
-     * @return \joshangell\falcon\drivers\CachePurgeInterface
+     * @return \ostark\falcon\drivers\CachePurgeInterface
      */
     public function getPurger(): CachePurgeInterface
     {
@@ -74,7 +74,7 @@ class Plugin extends BasePlugin
     }
 
     /**
-     * @return \joshangell\falcon\TagCollection
+     * @return \ostark\falcon\TagCollection
      */
     public function getTagCollection(): TagCollection
     {

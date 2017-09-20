@@ -1,4 +1,4 @@
-<?php namespace joshangell\falcon\behaviors;
+<?php namespace ostark\falcon\behaviors;
 
 use yii\base\Event;
 use yii\base\Behavior;

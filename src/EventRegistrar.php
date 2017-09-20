@@ -1,4 +1,4 @@
-<?php namespace joshangell\falcon;
+<?php namespace ostark\falcon;
 
 use craft\base\Element;
 use craft\elements\db\ElementQuery;
@@ -11,9 +11,8 @@ use craft\services\Elements;
 use craft\services\Sections;
 use craft\services\Structures;
 use craft\web\View;
-use joshangell\falcon\events\CacheResponseEvent;
+use ostark\falcon\events\CacheResponseEvent;
 use yii\base\Event;
-use yii\helpers\ArrayHelper;
 
 
 class EventRegistrar

@@ -1,4 +1,4 @@
-<?php namespace joshangell\falcon\events;
+<?php namespace ostark\falcon\events;
 
 use yii\base\Event;
 

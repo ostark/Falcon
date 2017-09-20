@@ -1,8 +1,8 @@
 {
-  "name": "joshangell/falcon",
-  "description": "foo",
+  "name": "ostark/falcon",
+  "description": "A cache plugin for Craft - supporting multiple Edge Caches",
   "type": "craft-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": [
     "craft",
     "cms",
@@ -31,7 +31,7 @@
   },
   "autoload": {
     "psr-4": {
-      "joshangell\\falcon\\": "src/"
+      "ostark\\falcon\\": "src/"
     }
   },
   "extra": {

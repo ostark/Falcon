@@ -1,6 +1,6 @@
 <?php
 
-namespace joshangell\falcon\models;
+namespace ostark\falcon\models;
 
 use Craft;
 use craft\base\Model;
