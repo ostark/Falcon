@@ -3,7 +3,9 @@
 
 use Craft;
 use craft\base\Plugin as BasePlugin;
+use craft\elements\Entry;
 use ostark\falcon\behaviors\CacheControlBehavior;
+use ostark\falcon\behaviors\TagHeaderBehavior;
 use ostark\falcon\drivers\CachePurgeInterface;
 use ostark\falcon\models\Settings;
 
@@ -28,6 +30,12 @@ class Plugin extends BasePlugin
         'structureId' => self::TAG_PREFIX_STRUCTURE
     ];
 
+    // DB
+    const TABLE_CACHE_ITEMS = '{{%falcon_cacheitems}}';
+    const TABLE_CACHE_TAGS = '{{%falcon_cachetags}}';
+
+    public $schemaVersion = '1.0.0';
+
     /**
      * Initialize Plugin
      */
@@ -44,9 +52,12 @@ class Plugin extends BasePlugin
         // Register event handlers
         EventRegistrar::registerFrontendEvents();
         EventRegistrar::registerUpdateEvents();
+        EventRegistrar::registerDashboardEvents();
 
         // Attach Behaviors
         \Craft::$app->getResponse()->attachBehavior('cache-control', CacheControlBehavior::class);
+        \Craft::$app->getResponse()->attachBehavior('tag-header', TagHeaderBehavior::class);
+
 
 
     }

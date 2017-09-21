@@ -17,17 +17,12 @@
 return [
 
     // Which driver?
-    'driver'      => getenv('FALCON_DRIVER'),
+    'driver'        => getenv('FALCON_DRIVER'),
 
     // TTL?
-    'default_ttl' => 3600,
+    'defaultMaxAge' => 3600,
 
-    // Exclude routes?
-    'excludes'    => [],
-
-    // Include routes?
-    'includes'    => [],
-
+    'localTagMap' => true,
 
     // Drivers settings
     'drivers'     => [

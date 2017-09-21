@@ -6,6 +6,8 @@ use yii\base\Object;
  * User: os
  * Date: 13.09.17
  * Time: 12:54
+ *
+ * @property bool $localTagMap
  */
 class AbstractPurger extends Object
 {
@@ -29,6 +31,12 @@ class AbstractPurger extends Object
 
     public function setheaderName($value) {
         $this->headerName = $value;
+    }
+
+    public function getUrlsByTags($tags = []) {
+        if ($this->localTagMap === false) {
+            return false;
+        }
     }
 
 

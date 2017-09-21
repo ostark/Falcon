@@ -19,13 +19,13 @@ class CacheControlBehavior extends Behavior
     public function events()
     {
         return [
-            Response::EVENT_BEFORE_SEND => 'beforeSendHeaders',
+            Response::EVENT_AFTER_SEND => 'beforeSendHeaders',
         ];
     }
 
     public function beforeSendHeaders(Event $event)
     {
-        //\Craft::dd($this->owner->getHeaders());
+        //\Craft::dd(session_cache_limiter());
 
     }
 
@@ -144,6 +144,17 @@ class CacheControlBehavior extends Behavior
     public function getCacheControl()
     {
         return $this->cacheControl;
+    }
+
+    public function setCacheControlDirectiveFromString(string $value = null)
+    {
+        if (is_null($value) || strlen($value) === 0) {
+            return false;
+        }
+        foreach (explode(', ', $value) as $directive) {
+            $parts = explode('=', $directive);
+            $this->addCacheControlDirective($parts[0], $parts[1] ?? true);
+        }
     }
 
     protected function getCacheControlHeader()

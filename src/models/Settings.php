@@ -34,9 +34,24 @@ class Settings extends Model
     /**
      * Some field model attribute
      *
+     * @var bool
+     */
+    public $localTagMap;
+
+
+    /**
+     * Some field model attribute
+     *
      * @var array
      */
     public $drivers;
+
+    /**
+     * Some field model attribute
+     *
+     * @var int
+     */
+    public $defaultMaxAge = null;
 
 
 
@@ -56,12 +71,15 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['driver', 'drivers'], 'required'],
+            [['driver', 'drivers', 'localTagMap'], 'required'],
             // ...
         ];
     }
 
-    public function getheaderName() {
+    public function getHeaderName() {
         return $this->drivers[$this->driver]['headerName'];
+    }
+    public function getHeaderTagDelimiter() {
+        return $this->drivers[$this->driver]['tagHeaderDelimiter'] ?? ' ';
     }
 }
