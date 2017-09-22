@@ -21,6 +21,7 @@ class Install extends Migration
             'url'         => $this->string(255)->notNull(),
             'content'     => $this->mediumText()->defaultValue(null),
             'maxAge'      => $this->bigInteger()->notNull(),
+            'ttl'         => $this->dateTime()->notNull(),
             'siteId'      => $this->integer(),
             'dateCreated' => $this->dateTime()->notNull()
         ]);
@@ -31,9 +32,11 @@ class Install extends Migration
             'tag'         => $this->string(64)->notNull()
         ]);
 
-        $this->createIndex(null, PLugin::TABLE_CACHE_ITEMS, 'url', true);
-        $this->createIndex(null, PLugin::TABLE_CACHE_ITEMS, 'dateCreated');
-        $this->createIndex(null, PLugin::TABLE_CACHE_TAGS, 'tag');
+        $this->createIndex('ttl_idx', PLugin::TABLE_CACHE_ITEMS, 'ttl');
+        $this->createIndex('url_unique_idx', Plugin::TABLE_CACHE_ITEMS, 'url', true);
+
+        $this->createIndex('cacheitems_id_idx', Plugin::TABLE_CACHE_TAGS, 'cacheItemId');
+        $this->createIndex('tag_idx', Plugin::TABLE_CACHE_TAGS, 'tag');
 
     }
 

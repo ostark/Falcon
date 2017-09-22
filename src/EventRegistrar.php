@@ -31,9 +31,18 @@ class EventRegistrar
 
     public static function registerFrontendEvents()
     {
-        // Don't cache CP or LivePreview requests
-        if (\Craft::$app->getRequest()->getIsCpRequest() ||
-            \Craft::$app->getRequest()->getIsLivePreview()
+        // No need to continue when in cli mode
+        if (\Craft::$app instanceof \craft\console\Application) {
+            return false;
+        }
+
+        // HTTP request object
+        $request = \Craft::$app->getRequest();
+
+        // Don't cache CP, LivePreview, Non-GET requests
+        if ($request->getIsCpRequest() ||
+            $request->getIsLivePreview() ||
+            ! $request->getIsGet()
         ) {
             return false;
         }
@@ -45,45 +54,42 @@ class EventRegistrar
             if (in_array(get_class($event->element), ['craft\elements\User', 'craft\elements\MatrixBlock'])) {
                 return;
             }
-            // Collect elements only for frontend GET requests
-            $request = \Craft::$app->getRequest();
-            if ($request->getIsGet() && !$request->getIsCpRequest()) {
-                Plugin::getInstance()->getTagCollection()->addTagsFromElement($event->row);
-            }
+
+            // Add to collection
+            Plugin::getInstance()->getTagCollection()->addTagsFromElement($event->row);
+
         });
 
         // Add the tags to the response header
         Event::on(View::class, View::EVENT_AFTER_RENDER_PAGE_TEMPLATE, function (TemplateEvent $event) {
 
             $plugin    = Plugin::getInstance();
-            $tags      = $plugin->getTagCollection()->getAll();
             $response  = \Craft::$app->getResponse();
+            $tags      = $plugin->getTagCollection()->getAll();
+            $settings  = $plugin->getSettings();
             $headers   = $response->getHeaders();
-            $settings  = Plugin::getInstance()->getSettings();
-            $delimiter = $settings->getHeaderTagDelimiter();
 
             // Make existing cache-control headers accessible
             $response->setCacheControlDirectiveFromString($headers->get('cache-control'));
 
-            // Don't cache
+            // Don't cache if private | no-cache set already
             if ($response->hasCacheControlDirective('private') || $response->hasCacheControlDirective('no-cache')) {
                 return;
             }
 
-
+            // MaxAge or defaultMaxAge?
             $maxAge = $response->getMaxAge() ?? $settings->defaultMaxAge;
 
             // Set Headers
-            $response->setTagHeader($settings->getHeaderName(), $tags, $delimiter);
+            $response->setTagHeader($settings->getHeaderName(), $tags, $settings->getHeaderTagDelimiter());
             $response->setSharedMaxAge($maxAge);
-
+            
             $plugin->trigger($plugin::EVENT_AFTER_SET_TAG_HEADER, new CacheResponseEvent([
                     'tags'       => $tags,
-                    'maxAge'     => $maxAge ?? $maxAge,
+                    'maxAge'     => $maxAge,
                     'requestUrl' => \Craft::$app->getRequest()->getUrl()
                 ]
             ));
-
         });
     }
 

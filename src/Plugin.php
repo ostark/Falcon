@@ -3,7 +3,6 @@
 
 use Craft;
 use craft\base\Plugin as BasePlugin;
-use craft\elements\Entry;
 use ostark\falcon\behaviors\CacheControlBehavior;
 use ostark\falcon\behaviors\TagHeaderBehavior;
 use ostark\falcon\drivers\CachePurgeInterface;
@@ -43,6 +42,11 @@ class Plugin extends BasePlugin
     {
         parent::init();
 
+        // Config pre-check
+        if (!isset($this->getSettings()->driver)) {
+            return false;
+        }
+
         // Register plugin components
         $this->setComponents([
             'purger'        => PurgerFactory::create($this->getSettings()->toArray()),
@@ -57,7 +61,6 @@ class Plugin extends BasePlugin
         // Attach Behaviors
         \Craft::$app->getResponse()->attachBehavior('cache-control', CacheControlBehavior::class);
         \Craft::$app->getResponse()->attachBehavior('tag-header', TagHeaderBehavior::class);
-
 
 
     }
