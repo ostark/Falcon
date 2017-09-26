@@ -1,6 +1,7 @@
 <?php namespace ostark\falcon;
 
 use craft\base\Element;
+use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\events\ElementEvent;
 use craft\events\ElementStructureEvent;
@@ -8,6 +9,7 @@ use craft\events\PopulateElementEvent;
 use craft\events\RegisterCacheOptionsEvent;
 use craft\events\SectionEvent;
 use craft\events\TemplateEvent;
+use craft\helpers\Db;
 use craft\services\Elements;
 use craft\services\Sections;
 use craft\services\Structures;
@@ -23,10 +25,19 @@ class EventRegistrar
 
     public static function registerUpdateEvents()
     {
-        Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, [EventRegistrar::class, 'handleUpdateEvent']);
-        Event::on(Structures::class, Structures::EVENT_AFTER_MOVE_ELEMENT, [EventRegistrar::class, 'handleUpdateEvent']);
-        Event::on(Sections::class, Sections::EVENT_AFTER_SAVE_SECTION, [EventRegistrar::class, 'handleUpdateEvent']);
-        Event::on(Element::class, Element::EVENT_AFTER_MOVE_IN_STRUCTURE, [EventRegistrar::class, 'handleUpdateEvent']);
+
+        Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, function($event) {
+            static::handleUpdateEvent($event);
+        });
+        Event::on(Structures::class, Structures::EVENT_AFTER_MOVE_ELEMENT, function($event) {
+            static::handleUpdateEvent($event);
+        });
+        Event::on(Sections::class, Sections::EVENT_AFTER_SAVE_SECTION, function($event) {
+            static::handleUpdateEvent($event);
+        });
+        Event::on(Element::class, Element::EVENT_AFTER_MOVE_IN_STRUCTURE, function($event) {
+            static::handleUpdateEvent($event);
+        });
     }
 
     public static function registerFrontendEvents()
@@ -36,13 +47,14 @@ class EventRegistrar
             return false;
         }
 
+
         // HTTP request object
         $request = \Craft::$app->getRequest();
 
         // Don't cache CP, LivePreview, Non-GET requests
         if ($request->getIsCpRequest() ||
             $request->getIsLivePreview() ||
-            ! $request->getIsGet()
+            !$request->getIsGet()
         ) {
             return false;
         }
@@ -63,11 +75,11 @@ class EventRegistrar
         // Add the tags to the response header
         Event::on(View::class, View::EVENT_AFTER_RENDER_PAGE_TEMPLATE, function (TemplateEvent $event) {
 
-            $plugin    = Plugin::getInstance();
-            $response  = \Craft::$app->getResponse();
-            $tags      = $plugin->getTagCollection()->getAll();
-            $settings  = $plugin->getSettings();
-            $headers   = $response->getHeaders();
+            $plugin   = Plugin::getInstance();
+            $response = \Craft::$app->getResponse();
+            $tags     = $plugin->getTagCollection()->getAll();
+            $settings = $plugin->getSettings();
+            $headers  = $response->getHeaders();
 
             // Make existing cache-control headers accessible
             $response->setCacheControlDirectiveFromString($headers->get('cache-control'));
@@ -83,18 +95,80 @@ class EventRegistrar
             // Set Headers
             $response->setTagHeader($settings->getHeaderName(), $tags, $settings->getHeaderTagDelimiter());
             $response->setSharedMaxAge($maxAge);
-            
+
             $plugin->trigger($plugin::EVENT_AFTER_SET_TAG_HEADER, new CacheResponseEvent([
                     'tags'       => $tags,
                     'maxAge'     => $maxAge,
-                    'requestUrl' => \Craft::$app->getRequest()->getUrl()
+                    'requestUrl' => \Craft::$app->getRequest()->getUrl(),
+                    'output'     => $event->output,
+                    'headers'    => $response->getHeaders()->toArray()
                 ]
             ));
         });
+
+        Event::on(Plugin::class, Plugin::EVENT_AFTER_SET_TAG_HEADER, function (CacheResponseEvent $event) {
+
+
+            $cacheItemId = (new Query())
+                ->select(['id'])
+                ->from([Plugin::TABLE_CACHE_ITEMS])
+                ->where(['url' => $event->requestUrl])
+                ->scalar();
+
+            // Remove existing cache
+            if ($cacheItemId) {
+
+                \Craft::$app
+                    ->getDb()
+                    ->createCommand()
+                    ->delete(Plugin::TABLE_CACHE_ITEMS, ['id' => $cacheItemId])
+                    ->execute();
+
+                \Craft::$app
+                    ->getDb()
+                    ->createCommand()
+                    ->delete(Plugin::TABLE_CACHE_TAGS, ['cacheItemId' => $cacheItemId])
+                    ->execute();
+            }
+
+            // Insert item
+            \Craft::$app->getDb()->createCommand()
+                ->insert(
+                    Plugin::TABLE_CACHE_ITEMS,
+                    [
+                        'url'         => $event->requestUrl,
+                        'body'        => $event->output,
+                        'headers'     => json_encode($event->headers),
+                        'maxAge'      => $event->maxAge,
+                        'ttl'         => Db::prepareDateForDb(new \DateTime('@' . (time() + $event->maxAge))),
+                        'siteId'      => \Craft::$app->getSites()->currentSite->id,
+                        'dateCreated' => Db::prepareDateForDb(new \DateTime())
+                    ],
+                    false)
+                ->execute();
+
+            $cacheItemId = \Craft::$app->getDb()->getLastInsertID(Plugin::TABLE_CACHE_ITEMS);
+            $values      = [];
+
+            foreach ($event->tags as $tag) {
+                $values[] = [$cacheItemId, $tag];
+            }
+
+            // Insert tags
+            \Craft::$app->getDb()->createCommand()
+                ->batchInsert(Plugin::TABLE_CACHE_TAGS, ['cacheItemId', 'tag'], $values, false)
+                ->execute();
+
+
+
+        });
+
+
     }
 
     public static function registerDashboardEvents()
     {
+        // Register cache purge checkbox
         Event::on(
             ClearCaches::class,
             ClearCaches::EVENT_REGISTER_CACHE_OPTIONS,
@@ -113,7 +187,7 @@ class EventRegistrar
     /**
      * @param \yii\base\Event $event
      */
-    protected function handleUpdateEvent(Event $event)
+    protected static function handleUpdateEvent(Event $event)
     {
 
         if ($event instanceof ElementEvent) {
@@ -130,7 +204,7 @@ class EventRegistrar
         $purger = Plugin::getInstance()->getPurger();
 
         // Push to queue
-        Craft::$app->getQueue()->push(new Job(function () use ($keys, $purger) {
+        \Craft::$app->getQueue()->push(new Job(function () use ($keys, $purger) {
             $purger->purgeByKeys($keys);
         }));
 

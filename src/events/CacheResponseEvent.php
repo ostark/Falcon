@@ -23,5 +23,15 @@ class CacheResponseEvent extends Event
      */
     public $maxAge = 0;
 
+    /**
+     * @var string
+     */
+    public $output;
+
+    /**
+     * @var array Array of headers
+     */
+    public $headers = [];
+
 
 }

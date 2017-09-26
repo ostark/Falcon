@@ -19,7 +19,8 @@ class Install extends Migration
         $this->createTable(Plugin::TABLE_CACHE_ITEMS, [
             'id'          => $this->primaryKey()->unsigned(),
             'url'         => $this->string(255)->notNull(),
-            'content'     => $this->mediumText()->defaultValue(null),
+            'body'        => $this->mediumText()->defaultValue(null),
+            'headers'     => $this->text()->defaultValue(null),
             'maxAge'      => $this->bigInteger()->notNull(),
             'ttl'         => $this->dateTime()->notNull(),
             'siteId'      => $this->integer(),

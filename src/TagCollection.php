@@ -32,6 +32,8 @@ class TagCollection
         foreach ($this->extractTags($elementRawQueryResult) as $tag) {
             $this->add($tag);
         }
+
+        $this->unique();
     }
 
     protected function extractTags(array $elementRawQueryResult = null): array
@@ -46,5 +48,12 @@ class TagCollection
         }
 
         return $tags;
+    }
+
+    protected function unique()
+    {
+        $this->tags = array_unique($this->tags);
+
+        return $this;
     }
 }
