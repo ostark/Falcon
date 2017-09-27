@@ -27,12 +27,11 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
      */
     public function purgeByKeys(array $keys)
     {
-        $this->sendPurgeRequest('purgetag', [
+        return $this->sendRequest('purgetag', [
                 'tags' => $keys
             ]
         );
 
-        return true;
     }
 
     /**
@@ -42,13 +41,10 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
      */
     public function purgeByUrl(string $url)
     {
-        $url = $this->domain . $url;
-        $this->sendPurgeRequest('purgeurl', [
-                'urls' => [$url]
+        return $this->sendRequest('purgeurl', [
+                'urls' => [$this->domain . $url]
             ]
         );
-
-        return true;
     }
 
 
@@ -57,10 +53,7 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
      */
     public function purgeAll()
     {
-        $this->sendPurgeRequest('purge', [], 'GET');
-
-        return true;
-
+        return $this->sendRequest('purge', [], 'GET');
     }
 
     /**
@@ -70,28 +63,25 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
      *
      * @return bool
      */
-    protected function sendPurgeRequest(string $type, array $params = [], $method = 'DELETE')
-    {;
-        $client  = new Client([
+    protected function sendRequest(string $type, array $params = [], $method = 'DELETE')
+    {
+        $token  = base64_encode("{$this->apiKey}:");
+        $client = new Client([
             'base_uri' => self::API_ENDPOINT,
-            'headers'  => ['Content-Type' => 'application/json']
+            'headers'  => [
+                'Content-Type'  => 'application/json',
+                'Authorization' => "Basic {$token}"
+            ]
         ]);
 
-        try {
+        $url     = "zones/{$type}/{$this->zoneId}.json";
+        $options = (count($params)) ? ['json' => $params] : [];
 
-            $options  = (count($params)) ? ['form_params' => $params] : [];
-            $options  = array_merge(['auth' => [$this->apiKey]], $options);
-            $response = $client->request($method, "zones/{$type}/{$this->zoneId}.json", $options);
+        $response = $client->request($method, $url, $options);
 
-            if (!in_array($response->getStatusCode(), [204, 200])) {
-                error_log($response->getStatusCode() . ' > ' . $response->getBody());
-
-                return false;
-            }
-
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-        }
+        return (in_array($response->getStatusCode(), [204, 200]))
+            ? true
+            : false;
 
     }
 }
