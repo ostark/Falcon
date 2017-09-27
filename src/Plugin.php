@@ -19,9 +19,9 @@ class Plugin extends BasePlugin
     const EVENT_AFTER_PURGE = 'falcon_after_purge';
 
     // Tag prefixes
-    const TAG_PREFIX_ELEMENT = 'el:';
-    const TAG_PREFIX_SECTION = 'se:';
-    const TAG_PREFIX_STRUCTURE = 'st:';
+    const TAG_PREFIX_ELEMENT = 'el';
+    const TAG_PREFIX_SECTION = 'se';
+    const TAG_PREFIX_STRUCTURE = 'st';
 
     // Mapping element properties <> tag prefixes
     const ELEMENT_PROPERTY_MAP = [
