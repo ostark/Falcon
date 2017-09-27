@@ -71,18 +71,16 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
      * @return bool
      */
     protected function sendPurgeRequest(string $type, array $params = [], $method = 'DELETE')
-    {
-
-        $apiKey  = base64_encode("{$this->apiKey}");
-        $headers = ['Content-Type' => 'application/json', 'Authorization' => "Basic {$apiKey}"];
+    {;
         $client  = new Client([
             'base_uri' => self::API_ENDPOINT,
-            'headers'  => $headers
+            'headers'  => ['Content-Type' => 'application/json']
         ]);
 
         try {
 
             $options  = (count($params)) ? ['form_params' => $params] : [];
+            $options  = array_merge(['auth' => [$this->apiKey]], $options);
             $response = $client->request($method, "zones/{$type}/{$this->zoneId}.json", $options);
 
             if (!in_array($response->getStatusCode(), [204, 200])) {
