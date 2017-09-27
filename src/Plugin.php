@@ -7,6 +7,7 @@ use ostark\falcon\behaviors\CacheControlBehavior;
 use ostark\falcon\behaviors\TagHeaderBehavior;
 use ostark\falcon\drivers\CachePurgeInterface;
 use ostark\falcon\models\Settings;
+use yii\queue\closure\Behavior;
 
 /**
  * @method    Settings getSettings()
@@ -61,7 +62,6 @@ class Plugin extends BasePlugin
         // Attach Behaviors
         \Craft::$app->getResponse()->attachBehavior('cache-control', CacheControlBehavior::class);
         \Craft::$app->getResponse()->attachBehavior('tag-header', TagHeaderBehavior::class);
-
 
     }
 

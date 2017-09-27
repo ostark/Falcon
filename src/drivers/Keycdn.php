@@ -1,4 +1,6 @@
-<?php namespace ostark\falcon\drivers;
+<?php
+
+namespace ostark\falcon\drivers;
 
 
 use GuzzleHttp\Client;
@@ -20,6 +22,8 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
 
     /**
      * @param array $keys
+     *
+     * @return bool
      */
     public function purgeByKeys(array $keys)
     {
@@ -27,27 +31,46 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
                 'tags' => $keys
             ]
         );
+
+        return true;
     }
 
     /**
      * @param string $url
+     *
+     * @return bool
      */
-            public function purgeByUrl(string $url)
+    public function purgeByUrl(string $url)
     {
         $url = $this->domain . $url;
         $this->sendPurgeRequest('purgeurl', [
                 'urls' => [$url]
             ]
         );
+
+        return true;
     }
 
 
+    /**
+     * @return bool
+     */
     public function purgeAll()
     {
-        // TODO: Implement purgeAll() method.
+        $this->sendPurgeRequest('purge', [], 'GET');
+
+        return true;
+
     }
 
-    protected function sendPurgeRequest(string $type, array $params = [])
+    /**
+     * @param string $type
+     * @param array  $params
+     * @param string $method HTTP verb
+     *
+     * @return bool
+     */
+    protected function sendPurgeRequest(string $type, array $params = [], $method = 'DELETE')
     {
 
         $apiKey  = base64_encode("{$this->apiKey}:");
@@ -59,9 +82,9 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
 
         try {
 
-            $response = $client->request('DELETE', "zones/{$type}/{$this->zoneId}.json", [
-                'form_params' => compact($params)
-            ]);
+            $options  = (count($params)) ? ['form_params' => $params] : [];
+            $response = $client->request($method, "zones/{$type}/{$this->zoneId}.json", $options);
+
             if (!in_array($response->getStatusCode(), [204, 200])) {
                 error_log($response->getStatusCode() . ' > ' . $response->getBody());
 

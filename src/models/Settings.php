@@ -31,13 +31,6 @@ class Settings extends Model
      */
     public $driver;
 
-    /**
-     * Some field model attribute
-     *
-     * @var bool
-     */
-    public $localTagMap;
-
 
     /**
      * Some field model attribute
@@ -52,7 +45,6 @@ class Settings extends Model
      * @var int
      */
     public $defaultMaxAge = null;
-
 
 
     // Public Methods
@@ -76,10 +68,38 @@ class Settings extends Model
         ];
     }
 
-    public function getHeaderName() {
+    /**
+     * @return string
+     */
+    public function getHeaderName()
+    {
         return $this->drivers[$this->driver]['headerName'];
     }
-    public function getHeaderTagDelimiter() {
+
+    /**
+     * @return string
+     */
+    public function getHeaderTagDelimiter()
+    {
         return $this->drivers[$this->driver]['tagHeaderDelimiter'] ?? ' ';
     }
+
+    /**
+     * @return array
+     */
+    public function getNoCacheElements()
+    {
+        return ['craft\elements\User', 'craft\elements\MatrixBlock'];
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return bool
+     */
+    public function isCachableElement(string $class)
+    {
+        return in_array($class, $this->getNoCacheElements()) ? false : true;
+    }
+
 }

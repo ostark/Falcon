@@ -19,13 +19,11 @@ return [
     // Which driver?
     'driver'        => getenv('FALCON_DRIVER'),
 
-    // TTL?
+    // Cache-control s-maxage default
     'defaultMaxAge' => 3600,
 
-    'localTagMap' => true,
-
     // Drivers settings
-    'drivers'     => [
+    'drivers'       => [
 
         'varnish' => [
             'url'        => getenv('VARNISH_URL'),
@@ -37,7 +35,6 @@ return [
             'apiKey'     => getenv('FASTLY_API_KEY'),
             'serviceId'  => getenv('FASTLY_SERVICE_ID'),
             'headerName' => 'Surrogate-Key',
-
         ],
 
         'keycdn' => [
