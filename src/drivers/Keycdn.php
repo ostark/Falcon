@@ -27,7 +27,7 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
      */
     public function purgeByKeys(array $keys)
     {
-        return $this->sendRequest('purgetag', [
+        return $this->sendRequest('DELETE', 'purgetag', [
                 'tags' => $keys
             ]
         );
@@ -41,7 +41,7 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
      */
     public function purgeByUrl(string $url)
     {
-        return $this->sendRequest('purgeurl', [
+        return $this->sendRequest('DELETE', 'purgeurl', [
                 'urls' => [$this->domain . $url]
             ]
         );
@@ -53,17 +53,17 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
      */
     public function purgeAll()
     {
-        return $this->sendRequest('purge', [], 'GET');
+        return $this->sendRequest('GET', 'purge', []);
     }
 
     /**
+     * @param string $method HTTP verb
      * @param string $type
      * @param array  $params
-     * @param string $method HTTP verb
      *
      * @return bool
      */
-    protected function sendRequest(string $type, array $params = [], $method = 'DELETE')
+    protected function sendRequest($method = 'DELETE', string $type, array $params = [])
     {
         $token  = base64_encode("{$this->apiKey}:");
         $client = new Client([
@@ -74,10 +74,10 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
             ]
         ]);
 
-        $url     = "zones/{$type}/{$this->zoneId}.json";
+        $uri     = "zones/{$type}/{$this->zoneId}.json";
         $options = (count($params)) ? ['json' => $params] : [];
 
-        $response = $client->request($method, $url, $options);
+        $response = $client->request($method, $uri, $options);
 
         return (in_array($response->getStatusCode(), [204, 200]))
             ? true

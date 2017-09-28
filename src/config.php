@@ -19,8 +19,8 @@ return [
     // Which driver?
     'driver'        => getenv('FALCON_DRIVER'),
 
-    // Cache-control s-maxage default
-    'defaultMaxAge' => 3600,
+    // Default for Cache-control s-maxage
+    'defaultMaxAge' => 3600 * 24 * 7,
 
     // Drivers settings
     'drivers'       => [
@@ -32,16 +32,19 @@ return [
         ],
 
         'fastly' => [
-            'apiKey'     => getenv('FASTLY_API_KEY'),
-            'serviceId'  => getenv('FASTLY_SERVICE_ID'),
             'headerName' => 'Surrogate-Key',
+            'serviceId'  => getenv('FASTLY_SERVICE_ID'),
+            'headers'    => [
+                'Fastly-Soft-Purge' => 1,
+                'Fastly-Key'        => getenv('FASTLY_API_TOKEN')
+            ]
         ],
 
         'keycdn' => [
+            'headerName' => 'Cache-Tag',
             'apiKey'     => getenv('KEYCDN_API_KEY'),
             'zoneId'     => getenv('KEYCDN_ZONE_ID'),
-            'domain'     => getenv('KEYCDN_DOMAIN'),
-            'headerName' => 'Cache-Tag'
+            'zoneUrl'    => getenv('KEYCDN_ZONE_URL')
         ],
 
         'custom' => [
