@@ -27,7 +27,6 @@ class PurgerFactory extends Component
         $driverConfig = $config['drivers'][$config['driver']];
         $driverClass = $driverConfig['class'] ?? self::DRIVERS_NAMESPACE . '\\' . ucfirst($config['driver']);
 
-
         return \Craft::createObject($driverClass,[$driverConfig]);
 
     }

@@ -17,7 +17,7 @@
 return [
 
     // Which driver?
-    'driver'        => getenv('FALCON_DRIVER'),
+    'driver'        => getenv('FALCON_DRIVER') ?? 'dummy',
 
     // Default for Cache-control s-maxage
     'defaultMaxAge' => 3600 * 24 * 7,
@@ -25,21 +25,22 @@ return [
     // Drivers settings
     'drivers'       => [
 
+        // Varnish config
         'varnish' => [
-            'url'        => getenv('VARNISH_URL'),
             'headerName' => 'X-HashTwo',
+            'url'        => getenv('VARNISH_URL'),
             'headers'    => [],
         ],
 
+        // Fastly config
         'fastly' => [
             'headerName' => 'Surrogate-Key',
             'serviceId'  => getenv('FASTLY_SERVICE_ID'),
-            'headers'    => [
-                'Fastly-Soft-Purge' => 1,
-                'Fastly-Key'        => getenv('FASTLY_API_TOKEN')
-            ]
+            'apiToken'   => getenv('FASTLY_API_TOKEN'),
+            'domain'     => getenv('FASTLY_DOMAIN'),
         ],
 
+        // KeyCDN config
         'keycdn' => [
             'headerName' => 'Cache-Tag',
             'apiKey'     => getenv('KEYCDN_API_KEY'),
@@ -47,11 +48,10 @@ return [
             'zoneUrl'    => getenv('KEYCDN_ZONE_URL')
         ],
 
-        'custom' => [
-            'class'      => 'namespace\to\driver\Custom',
-            'headerName' => 'X-Otic-Cache-Tag',
-            'param1'     => '...',
-            'param2'     => '...',
+        // Dummy driver (default)
+        'dummy' => [
+            'headerName'      => 'X-Dummy-Cache-Tag',
+            'logPurgeActions' => true,
         ]
     ]
 ];
