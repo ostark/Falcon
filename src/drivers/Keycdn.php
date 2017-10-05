@@ -17,7 +17,7 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
 
     public $zoneId;
 
-    public $domain;
+    public $zoneUrl;
 
 
     /**
@@ -42,7 +42,7 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
     public function purgeByUrl(string $url)
     {
         return $this->sendRequest('DELETE', 'purgeurl', [
-                'urls' => [$this->domain . $url]
+                'urls' => [$this->zoneUrl . $url]
             ]
         );
     }
