@@ -36,6 +36,7 @@ class Plugin extends BasePlugin
 
     public $schemaVersion = '1.0.0';
 
+
     /**
      * Initialize Plugin
      */
@@ -65,6 +66,28 @@ class Plugin extends BasePlugin
 
     }
 
+
+    // ServiceLocators
+    // =========================================================================
+
+    /**
+     * @return \ostark\falcon\drivers\CachePurgeInterface
+     */
+    public function getPurger(): CachePurgeInterface
+    {
+        return $this->get('purger');
+    }
+
+
+    /**
+     * @return \ostark\falcon\TagCollection
+     */
+    public function getTagCollection(): TagCollection
+    {
+        return $this->get('tagCollection');
+    }
+
+
     // Protected Methods
     // =========================================================================
 
@@ -80,19 +103,17 @@ class Plugin extends BasePlugin
 
 
     /**
-     * @return \ostark\falcon\drivers\CachePurgeInterface
+     * Is called after the plugin is installed.
+     * Copies example config to project's config folder
      */
-    public function getPurger(): CachePurgeInterface
+    protected function afterInstall()
     {
-        return $this->get('purger');
-    }
+        $configSourceFile = __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
+        $configTargetFile = \Craft::$app->getConfig()->configDir . DIRECTORY_SEPARATOR . $this->handle . '.php';
 
-    /**
-     * @return \ostark\falcon\TagCollection
-     */
-    public function getTagCollection(): TagCollection
-    {
-        return $this->get('tagCollection');
+        if (!file_exists($configTargetFile)) {
+            copy($configSourceFile, $configTargetFile);
+        }
     }
 
 
