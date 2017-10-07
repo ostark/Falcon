@@ -1,4 +1,5 @@
 <?php namespace ostark\falcon\drivers;
+
 use yii\base\Object;
 
 /**
@@ -11,33 +12,9 @@ use yii\base\Object;
  */
 class AbstractPurger extends Object
 {
-    /**
-     * @var string
-     */
-    protected $headerName;
-
-    protected $queue = false;
-
     public function __construct($config)
     {
         // assign config to object properties
         parent::__construct($config);
     }
-
-
-    public function getHttpClient() {
-
-    }
-
-    public function setheaderName($value) {
-        $this->headerName = $value;
-    }
-
-    public function getUrlsByTags($tags = []) {
-        if ($this->localTagMap === false) {
-            return false;
-        }
-    }
-
-
 }

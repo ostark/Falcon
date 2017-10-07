@@ -27,30 +27,30 @@ return [
 
         // Varnish config
         'varnish' => [
-            'headerName' => 'X-HashTwo',
-            'url'        => getenv('VARNISH_URL'),
-            'headers'    => [],
+            'tagHeaderName'   => 'XKEY',
+            'purgeHeaderName' => 'XKEY-PURGE',
+            'purgeUrl'        => getenv('VARNISH_URL') ?? 'http://127.0.0.1:80/',
         ],
 
         // Fastly config
-        'fastly' => [
-            'headerName' => 'Surrogate-Key',
-            'serviceId'  => getenv('FASTLY_SERVICE_ID'),
-            'apiToken'   => getenv('FASTLY_API_TOKEN'),
-            'domain'     => getenv('FASTLY_DOMAIN'),
+        'fastly'  => [
+            'tagHeaderName' => 'Surrogate-Key',
+            'serviceId'     => getenv('FASTLY_SERVICE_ID'),
+            'apiToken'      => getenv('FASTLY_API_TOKEN'),
+            'domain'        => getenv('FASTLY_DOMAIN'),
         ],
 
         // KeyCDN config
-        'keycdn' => [
-            'headerName' => 'Cache-Tag',
-            'apiKey'     => getenv('KEYCDN_API_KEY'),
-            'zoneId'     => getenv('KEYCDN_ZONE_ID'),
-            'zoneUrl'    => getenv('KEYCDN_ZONE_URL')
+        'keycdn'  => [
+            'tagHeaderName' => 'Cache-Tag',
+            'apiKey'        => getenv('KEYCDN_API_KEY'),
+            'zoneId'        => getenv('KEYCDN_ZONE_ID'),
+            'zoneUrl'       => getenv('KEYCDN_ZONE_URL')
         ],
 
         // Dummy driver (default)
-        'dummy' => [
-            'headerName'      => 'X-Dummy-Cache-Tag',
+        'dummy'   => [
+            'tagHeaderName'   => 'X-Dummy-Cache-Tag',
             'logPurgeActions' => true,
         ]
     ]

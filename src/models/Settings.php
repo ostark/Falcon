@@ -71,9 +71,9 @@ class Settings extends Model
     /**
      * @return string
      */
-    public function getHeaderName()
+    public function getTagHeaderName()
     {
-        return $this->drivers[$this->driver]['headerName'];
+        return $this->drivers[$this->driver]['tagHeaderName'];
     }
 
     /**

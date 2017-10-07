@@ -93,7 +93,7 @@ class EventRegistrar
             $maxAge = $response->getMaxAge() ?? $settings->defaultMaxAge;
 
             // Set Headers
-            $response->setTagHeader($settings->getHeaderName(), $tags, $settings->getHeaderTagDelimiter());
+            $response->setTagHeader($settings->getTagHeaderName(), $tags, $settings->getHeaderTagDelimiter());
             $response->setSharedMaxAge($maxAge);
 
             $plugin->trigger($plugin::EVENT_AFTER_SET_TAG_HEADER, new CacheResponseEvent([

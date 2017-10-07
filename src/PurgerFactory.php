@@ -20,8 +20,8 @@ class PurgerFactory extends Component
         if (!isset($config['drivers'][$config['driver']])) {
             throw new InvalidArgumentException("driver '{$config['driver']}' is not configured");
         }
-        if (!isset($config['drivers'][$config['driver']]['headerName'])) {
-            throw new InvalidArgumentException("'headerName' is not configured");
+        if (!isset($config['drivers'][$config['driver']]['tagHeaderName'])) {
+            throw new InvalidArgumentException("'tagHeaderName' is not configured");
         }
 
         $driverConfig = $config['drivers'][$config['driver']];

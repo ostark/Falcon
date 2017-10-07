@@ -7,7 +7,6 @@ use GuzzleHttp\Client;
 
 class Keycdn extends AbstractPurger implements CachePurgeInterface
 {
-
     /**
      * KeyCDN API endpoint
      */
@@ -31,7 +30,6 @@ class Keycdn extends AbstractPurger implements CachePurgeInterface
                 'tags' => $keys
             ]
         );
-
     }
 
     /**

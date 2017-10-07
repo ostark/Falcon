@@ -18,8 +18,8 @@ class Dummy extends AbstractPurger implements CachePurgeInterface
      */
     public function purgeByKeys(array $keys)
     {
-        $joindKeys = implode(', ', $keys);
-        $this->log("Dummy::purgeByUrl([{$joindKeys}]) was called.");
+        $joinedKeys = implode(', ', $keys);
+        $this->log("Dummy::purgeByUrl([{$joinedKeys}]) was called.");
 
         return true;
     }
@@ -58,7 +58,6 @@ class Dummy extends AbstractPurger implements CachePurgeInterface
         }
 
         \Craft::info($message, "falcon");
-
     }
 
 }

@@ -5,19 +5,37 @@ use GuzzleHttp\Client;
 
 class Varnish extends AbstractPurger implements CachePurgeInterface
 {
+    /**
+     * @var string
+     */
+    public $purgeHeaderName;
 
+    /**
+     * @var string
+     */
+    public $purgeUrl;
+
+
+    /**
+     * @param array $keys
+     */
     public function purgeByKeys(array $keys)
     {
         $this->sendPurgeRequest([
-                'headers' => [$this->headerName => implode(" " . $keys)]
+                'base_uri' => $this->purgeUrl,
+                'headers'  => [$this->purgeHeaderName => implode(" " . $keys)]
             ]
         );
     }
 
+    /**
+     * @param string $url
+     */
     public function purgeByUrl(string $url)
     {
         $this->sendPurgeRequest([
-                'url' => $url
+                'base_uri' => $this->purgeUrl . $url,
+                'url'      => $url
             ]
         );
     }
@@ -27,15 +45,12 @@ class Varnish extends AbstractPurger implements CachePurgeInterface
         // TODO: Implement purgeAll() method.
     }
 
-    protected function sendPurgeRequest(array $options = []){
+    protected function sendPurgeRequest(array $options = [])
+    {
+        $response = (new Client($options))->request('PURGE');
 
-        $client  = new Client([]);
-
-        try {
-
-        } catch (\Exception $e) {
-            // $e->getMessage()
-        }
-
+        return (in_array($response->getStatusCode(), [204, 200]))
+            ? true
+            : false;
     }
 }

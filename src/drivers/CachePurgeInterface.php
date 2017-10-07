@@ -24,8 +24,6 @@ interface CachePurgeInterface
 
 
     /**
-     * @param string $url
-     *
      * @return bool
      */
     public function purgeAll();

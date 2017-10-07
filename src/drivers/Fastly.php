@@ -22,16 +22,24 @@ use GuzzleHttp\Client;
  */
 class Fastly extends AbstractPurger implements CachePurgeInterface
 {
-
     /**
      * Fastly API endpoint
      */
     const API_ENDPOINT = 'https://api.fastly.com';
 
+    /**
+     * @var string
+     */
     public $apiToken;
 
+    /**
+     * @var string
+     */
     public $serviceId;
 
+    /**
+     * @var string
+     */
     public $domain;
 
 
