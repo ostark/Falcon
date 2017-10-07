@@ -8,7 +8,6 @@ Craft 2 development happens here: https://github.com/joshangell/Falcon
 - multi cache proxy support (Varnish, Keycdn, Fastly, Cloudflare, Local)
 - autoinvalidation
 
-<<<<<<< HEAD
 ## Installation
 
 1. Install with Composer via `composer require ostark/falcon` from your project directory
@@ -39,8 +38,6 @@ VARNISH_URL=<REPLACE-ME>
 
 ---
 
-=======
->>>>>>> 0cd4858... Peparing 1.0 release
 ### Performance results
 ![example](https://github.com/ostark/falcon-craft3/blob/master/examples/preformance.png)
 
