@@ -1,9 +1,9 @@
-# Falcon Cache plugin for Craft CMS 3.x
+# Falcon Cache plugin for Craft CMS 3
 
-This plugin helps you using cache proxies with Craft. 
+This plugin speeds up Craft dramatically using a **Cache Proxy** in front of your webserver. [Josh Angell](https://github.com/joshangell/Falcon) started with this idea intitallally for Craft 2 with support for Varnish.  
 
-It adds the neccessary `Cache-Control` and `XKEY/Surrogate-Key/Cache-Tag` headers to your pages. 
-When Entries get updated it takes care of the cache invalidation. 
+The Plugin adds the neccessary `Cache-Control` and `XKEY/Surrogate-Key/Cache-Tag` headers to your pages. 
+When Entries or Sections get updated in the Control Panel it takes care of the cache invalidation. 
 
 If you need an introduction to HTTP Caching, I highly recommend [this article](https://blog.fortrabbit.com/mastering-http-caching). 
 
@@ -18,8 +18,7 @@ If you need an introduction to HTTP Caching, I highly recommend [this article](h
 
 1. Install with Composer via `composer require ostark/falcon` from your project directory
 2. Install plugin with this command `php craft install/plugin falcon` or in the Craft CP under Settings > Plugins
-
-A new configuration file gets created in `your-project/config/falcon.php`. Most settings are controlled by ENV vars.
+3. A new configuration file gets generated automatically in `your-project/config/falcon.php`.
 
 
 
@@ -51,11 +50,7 @@ With `Cache-Control` headers you can disabled caching for certain templates:
 {% header "Cache-Control: private, no-cache" %}
 ```
 
----
 
-Craft 2 development happens here: https://github.com/joshangell/Falcon
-
----
 
 ### Performance results
 ![example](https://github.com/ostark/falcon-craft3/blob/master/resources/preformance.png)
