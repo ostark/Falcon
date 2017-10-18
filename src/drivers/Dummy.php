@@ -24,6 +24,7 @@ class Dummy extends AbstractPurger implements CachePurgeInterface
         return true;
     }
 
+
     /**
      * @param string $url
      *
@@ -57,7 +58,7 @@ class Dummy extends AbstractPurger implements CachePurgeInterface
             return;
         }
 
-        \Craft::info($message, "falcon");
+        \Craft::warning($message, "falcon");
     }
 
 }
