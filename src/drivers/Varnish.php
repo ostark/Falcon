@@ -23,7 +23,7 @@ class Varnish extends AbstractPurger implements CachePurgeInterface
     {
         $this->sendPurgeRequest([
                 'base_uri' => $this->purgeUrl,
-                'headers'  => [$this->purgeHeaderName => implode(" " . $keys)]
+                'headers'  => [$this->purgeHeaderName => implode(" ", $keys)]
             ]
         );
     }
