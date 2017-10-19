@@ -53,9 +53,9 @@ With `Cache-Control` headers you can disabled caching for certain templates:
 
 
 ### Performance results
-![example](https://github.com/ostark/falcon-craft3/blob/master/resources/preformance.png)
+![example](https://github.com/ostark/falcon/blob/master/resources/preformance.png)
 
 ### Cache Tag Headers
-![example](https://github.com/ostark/falcon-craft3/blob/master/resources/response-header.png)
+![example](https://github.com/ostark/falcon/blob/master/resources/response-header.png)
 
 
