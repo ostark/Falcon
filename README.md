@@ -9,8 +9,8 @@ If you need an introduction to HTTP Caching, I highly recommend [this article](h
 
 ## Supported Cache Drivers
 
-* [KeyCDN](https://www.keycdn.com) (SaaS)
-* [Fastly](https://www.fastly.com) (SaaS)
+* [KeyCDN](https://www.keycdn.com) (CDN/SaaS)
+* [Fastly](https://www.fastly.com) (CDN/SaaS)
 * Varnish (your own proxy)
 * Dummy (does nothing, loggs purge actions)
 
